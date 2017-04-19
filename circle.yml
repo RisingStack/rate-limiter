@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    working_directory: /tmp/app
+    environment:
+      - BASH_ENV: /root/.bashrc
+      - SHELL: /bin/bash
+      - NODE_MATRIX: 4 5 6 7
+    docker:
+      - image: debian:wheezy
+    steps:
+      - run: apt-get update -y
+      - run: apt-get install -y curl python python-pip python-dev build-essential libreadline-gplv2-dev libncurses5-dev unzip
+      - run: pip install hererocks && hererocks $HOME -r^ -l 5.1 && export PATH=$PATH:$HOME/bin && luarocks path --bin >> /root/.bashrc
+      - run: luarocks install busted && luarocks install luacov
+      - run: curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+      - checkout
+      - run: for version in $NODE_MATRIX; do nvm install $version >/dev/null; nvm use $version; npm i >/dev/null; npm rebuild >/dev/null; npm run --loglevel silent make -- test_client; done
+      - run: npm run --loglevel silent make -- test_redis

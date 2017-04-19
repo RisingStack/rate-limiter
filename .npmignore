@@ -44,5 +44,15 @@ node_modules/
 *.out
 
 coverage
-
 benchmarks
+
+# Below are not ignored by VCS
+
+.travis.yml
+.luacov
+.editorconfig
+.eslintignore
+.eslintrc.yml
+test
+Makefile
+.npmignore

@@ -1,0 +1,35 @@
+{
+  "version": "1.0.1",
+  "name": "@risingstack/rate-limiter",
+  "main": "lib/client.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RisingStack/rate-limiter.git"
+  },
+  "author": "RisingStack",
+  "contributors": [
+    "Dávid Szakállas <david.szakallas@gmail.com> (https://davidka.me/)"
+  ],
+  "bugs": {
+    "url": "https://github.com/RisingStack/rate-limiter/issues"
+  },
+  "homepage": "https://github.com/RisingStack/rate-limiter#readme",
+  "keywords": [ "rate", "limiter", "redis" ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.12"
+  },
+  "scripts": {
+    "make": "make"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.19.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "sinon": "^2.1.0"
+  },
+  "dependencies": {
+    "@risingstack/microtime": "^2.1.6"
+  }
+}
