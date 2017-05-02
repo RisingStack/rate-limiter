@@ -26,9 +26,9 @@ Use
     interval: 1000, // in milliseconds
     maxInInterval: 10,
     minDifference: 100, // optional: the minimum time (in milliseconds) between any two actions
-    buckets: 1000, // optional: splits interval to 1000 equidistant buckets, lossfully sampling
-    // attempts to save memory and CPU usage 
-    mode: 'binary' // do not count failed attempts (this is the default mode)
+    buckets: 1000, // optional: splits interval to 1000 equidistant buckets, samples attempts
+    // to save memory and CPU usage 
+    mode: 'binary' // do not record capped attempts (this is the default mode)
   });
 
   function attemptAction(userId) {
@@ -88,28 +88,22 @@ type MultiLimitOption = {
 - **redis**: pass an instantiated ioredis client here.
 - **interval**: length of the rate limiting window in millis.
 - **minDifference**: optional minimum interval between consecutive attempts in millis.
-- **buckets**: how many buckets should the sampling window have. Larger buckets result in better accuracy, however with significant degradation in processing time. The default value of `10000` should suffice for most use-cases, however when using `uniform` mode with frequent unit increments, you should aim for something even smaller.
+- **buckets**: how many buckets the sampling window has. Larger buckets result in better accuracy, however with significant degradation in processing time. The default value of `10000` should suffice for most use cases, however when using `uniform` mode with frequent unit increments, you should aim for something even smaller.
 - **mode**: governs how failed attempts are handled. In descending order of gratuitousness:
-  - `'nary'`: Do not count attempts exceeding the limit. Fit batch actions into existing slots, so they can be partially accepted.
-  - `'binary'`: Do not count attempts exceeding the limit. When batching, either everything is accepted or discarded.
+  - `'nary'`: Do not count attempts exceeding the limit. Batch increments can be partially accepted by filling the existing space.
+  - `'binary'`: Do not count attempts exceeding the limit. When batching, either the whole request is accepted or discarded.
   Note that in case of a unit increment, `binary` and `nary` behave the same way.
-  - `'uniform'`: every attempt counts. This is default the behavior of [classdojo/rolling-rate-limiter](https://github.com/classdojo/rolling-rate-limiter).
+  - `'uniform'`: every attempt counts, including those above the limit. This is default the behavior of [classdojo/rolling-rate-limiter](https://github.com/classdojo/rolling-rate-limiter).
 
 On how limits are identified:
-Each of the limits is identified by a key, composed of `namespace`, `index`, and `id`. `namespace` and `index` is specified at instantiation. If you have a single limit,
-`index` will be the empty string. Each of the limits get unique keys. Specifying them in an array will result in the following:
-
-```
-[0] : ${namespace}
-[n] : ${namespace}:${n}; n >= 1
-```
-If you use an object instead, the keys become the indices.
-`id` is specified when calling the `rateLimit` function. It is optional as well, but if exists it will be appended to the the key like `${namespaceAndIndex}:${id}`.
+Limits are identified by a key comprising `namespace`, `index` and `id`. You can specify `namespace` and `index` when instantiating the rate limiter. The former is set with a propery. If you have a single limit,
+`index` will be the empty string. If you have multiple limits in an array their index becomes `index` appended with a colon. If you use an object instead, the keys become the indices.
+`id` is specified when calling the `rateLimit` function. It is optional as well, but if exists it will be appended with a colon.
 
 ### rateLimiter
 ```js
 rateLimiter(
-  id?: string = "",
+  id?: string = '',
   n?: number = 1, 
   cb ?: (err: ?Error, result: { acknowledged: number, actionsRemaining: number, wait: number }) => void
 ): void

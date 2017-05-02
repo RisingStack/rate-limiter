@@ -49,6 +49,7 @@ benchmarks
 # Below are not ignored by VCS
 
 .travis.yml
+circle.yml
 .luacov
 .editorconfig
 .eslintignore

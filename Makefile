@@ -1,12 +1,12 @@
 test : test_redis test_client
-.PHONY : test_redis
+.PHONY : test
 
 lint :
 	@echo $@
 	@eslint lib test
 .PHONY : lint
 
-test_redis: 
+test_redis : 
 	@echo $@
 	@busted test -c
 	@luacov
@@ -14,7 +14,7 @@ test_redis:
 	@echo 
 .PHONY : test_redis
 
-test_client:
+test_client :
 	@echo $@
 	@istanbul cover _mocha test
 .PHONY : test_client
