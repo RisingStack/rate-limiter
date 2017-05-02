@@ -18,7 +18,7 @@ Use
 
 ```js
   var rateLimiterFactory = require('@risingstack/rate-limiter');
-  var Redis = require('ioredis'); // ioredis recommended.
+  var Redis = require('ioredis');
   var redis = new Redis();
 
   var limiter = rateLimiterFactory({
@@ -85,7 +85,7 @@ type MultiLimitOption = {
   } | Limit[]
 }
 ```
-- **redis**: pass an instantiated ioredis client here.
+- **redis**: pass an instantiated redis client here.
 - **interval**: length of the rate limiting window in millis.
 - **minDifference**: optional minimum interval between consecutive attempts in millis.
 - **buckets**: how many buckets the sampling window has. Larger buckets result in better accuracy, however with significant degradation in processing time. The default value of `10000` should suffice for most use cases, however when using `uniform` mode with frequent unit increments, you should aim for something even smaller.
