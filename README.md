@@ -23,7 +23,6 @@ Use
 
   var limiter = rateLimiterFactory({
     redis: redis,
-    namespace?: string = "",
     interval: 1000, // in milliseconds
     maxInInterval: 10,
     minDifference: 100, // optional: the minimum time (in milliseconds) between any two actions
