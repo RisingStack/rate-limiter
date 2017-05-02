@@ -36,7 +36,9 @@ rules:
     - error
     - never
   consistent-return: error
-  consistent-this: error
+  consistent-this:
+    - error
+    - self
   curly: error
   default-case: error
   dot-location: error
@@ -210,7 +212,7 @@ rules:
   require-await: error
   require-jsdoc: 'off'
   rest-spread-spacing: error
-  semi: 'off'
+  semi: 'error'
   semi-spacing: error
   sort-imports: error
   sort-keys: 'off'
